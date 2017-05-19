@@ -4,9 +4,9 @@ import Data.Char
 
 -- Fibonacci
 fib :: Integer -> Integer
-fib 0 = 0
-fib 1 = 1
-fib n = fib (n - 1) + fib (n - 2)
+fib n 
+   | n < 2 = n
+   | otherwise = fib (n - 1) + fib (n - 2)
 
 -- Rövarspråk
 rovarsprak :: String -> String
@@ -34,5 +34,11 @@ separate (x:xs)
         | isAlpha x = x: separate xs -- If head is char go to next
         | otherwise = ' ': separate xs -- If not char replace with space
 
+-- Skyffla om lista
+skyffla :: [a] -> [a] -- Recive list of generic and return list of same type
+skyffla [] = []
+skyffla list = (head list : everyOther (drop 2 list)) ++ skyffla (everyOther (drop 1 list)) -- Separate every second element from list then recursivly do the same on the ones left
 
-skyffla s = s
+everyOther :: [a] -> [a]
+everyOther [] = []
+everyOther x = head x : everyOther (drop 2 x) 
