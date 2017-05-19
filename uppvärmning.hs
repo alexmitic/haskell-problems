@@ -24,15 +24,15 @@ karpsravor (x:xs) --Separate head and tail
 
 -- Medellängd av alla ord i en sträng. Separeras på allt förutom bokstäver
 medellangd :: String -> Double
-medellangd [] = 0
-medellangd x = fromIntegral (sum list) / fromIntegral (length list)
-        where list = map length (words (separate x))
+medellangd [] = 0 
+medellangd x = fromIntegral (sum list) / fromIntegral (length list) -- Convert all to floats, divied sum of list with length of list
+        where list = map length (words (separate x)) -- Use map to apply length to every word in string x
 
-separate :: String -> String
+separate :: String -> String -- Helper for medellängd
 separate [] = []
 separate (x:xs)
-        | isAlpha x = x: separate xs
-        | otherwise = ' ': separate xs
+        | isAlpha x = x: separate xs -- If head is char go to next
+        | otherwise = ' ': separate xs -- If not char replace with space
 
 
 skyffla s = s
