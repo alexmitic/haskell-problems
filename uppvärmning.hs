@@ -1,5 +1,7 @@
 module F1 where
-        
+
+import Data.Char
+
 -- Fibonacci
 fib :: Integer -> Integer
 fib 0 = 0
@@ -20,6 +22,17 @@ karpsravor (x:xs) --Separate head and tail
         | x `notElem` "aeiouy"   = x: karpsravor (tail (tail xs)) -- If head not vocal
         | otherwise              = x: karpsravor xs
 
+-- Medellängd av alla ord i en sträng. Separeras på allt förutom bokstäver
+medellangd :: String -> Double
+medellangd [] = 0
+medellangd x = fromIntegral (sum list) / fromIntegral (length list)
+        where list = map length (words (separate x))
 
-medellangd s = 1.0
+separate :: String -> String
+separate [] = []
+separate (x:xs)
+        | isAlpha x = x: separate xs
+        | otherwise = ' ': separate xs
+
+
 skyffla s = s
