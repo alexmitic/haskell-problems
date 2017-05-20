@@ -24,3 +24,13 @@ seqSequence (MolSeq _ s _) = s
 -- Return length of sequence
 seqLength :: MolSeq -> Int
 seqLength (MolSeq _ s _) = length s
+
+seqDistance :: MolSeq -> MolSeq -> Double
+seqDistance (MolSeq _ s1 _) (MolSeq _ s2 _) = fromInteger (length s1)
+
+numDifferent :: String -> String -> Double
+numDifferent [] [] = 0
+numDifferent (s1h:s1t) (s2h:s2t)
+        |s1h == s2h = numDifferent s1t s2t
+        |otherwise = 1 + numDifferent s1t s2t
+        
