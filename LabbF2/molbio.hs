@@ -81,9 +81,9 @@ fam5 = [   ("5A1_Human","DQTFISIVDWARRCMVFKELEVADQMTLLQNCWSELLVFDHIYRQVQHLLVTGQE
 
 -- These functions gives a lot of output...
 famseqs = zip ["fam1", "fam2", "fam3", "fam4", "fam5"] (map seqdata [fam1, fam2, fam3, fam4, fam5])
-profiles = [molseqs2profile name fam | (name, fam) <- famseqs]
+-- profiles = [molseqs2profile name fam | (name, fam) <- famseqs]
 
-
+      
 -- A few quick tests
 
 test1 = seqdata figur
@@ -101,33 +101,33 @@ seqDistTest3 = snabbtest seqDistance (seqdata foxp4)
 seqDistTest4 = snabbtest seqDistance (seqdata fam5)
 
 
-test2 = molseqs2profile "profile for figure 1" (seqdata figur)
+-- test2 = molseqs2profile "profile for figure 1" (seqdata figur)
 
--- Should return 0.28571542857...
-profileFreqTest1 = profileFrequency (head profiles) 17 'V'
+-- -- Should return 0.28571542857...
+-- profileFreqTest1 = profileFrequency (head profiles) 17 'V'
 
--- Should return 0.0
-profileFreqTest2 = profileFrequency (head profiles) 42 'F'
+-- -- Should return 0.0
+-- profileFreqTest2 = profileFrequency (head profiles) 42 'F'
 
--- Should return 171.14285714...
-profileDistTest = snabbtest profileDistance profiles
+-- -- Should return 171.14285714...
+-- profileDistTest = snabbtest profileDistance profiles
 
 
--- Should produce the following matrix (values rounded):
---         human   cow     dog     rat     mouse   frog
--- human     0.0   0.090   0.055   0.051   0.055   0.245
--- cow             0.0     0.119   0.126   0.124   0.314
--- dog                     0.0     0.090   0.090   0.272
--- rat                             0.0     0.017   0.256
--- mouse                                   0.0     0.259
--- frog                                            0.0
-distMatrixTest1 = distanceMatrix (seqdata foxp4)
+-- -- Should produce the following matrix (values rounded):
+-- --         human   cow     dog     rat     mouse   frog
+-- -- human     0.0   0.090   0.055   0.051   0.055   0.245
+-- -- cow             0.0     0.119   0.126   0.124   0.314
+-- -- dog                     0.0     0.090   0.090   0.272
+-- -- rat                             0.0     0.017   0.256
+-- -- mouse                                   0.0     0.259
+-- -- frog                                            0.0
+-- distMatrixTest1 = distanceMatrix (seqdata foxp4)
 
--- Should produce the following matrix (values rounded):
---        fam1    fam2    fam3    fam4    fam5
----fam1     0.0   171.1   176.8   167.2   179.3
----fam2             0.0   151.7   161.3   151.2
----fam3                     0.0   160.0   154.1
----fam4                             0.0   167.0
----fam5                                     0.0
-distMatrixTest2 = distanceMatrix profiles
+-- -- Should produce the following matrix (values rounded):
+-- --        fam1    fam2    fam3    fam4    fam5
+-- ---fam1     0.0   171.1   176.8   167.2   179.3
+-- ---fam2             0.0   151.7   161.3   151.2
+-- ---fam3                     0.0   160.0   154.1
+-- ---fam4                             0.0   167.0
+-- ---fam5                                     0.0
+-- distMatrixTest2 = distanceMatrix profiles

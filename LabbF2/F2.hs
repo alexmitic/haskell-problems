@@ -25,12 +25,35 @@ seqSequence (MolSeq _ s _) = s
 seqLength :: MolSeq -> Int
 seqLength (MolSeq _ s _) = length s
 
-seqDistance :: MolSeq -> MolSeq -> Double
-seqDistance (MolSeq _ s1 _) (MolSeq _ s2 _) = fromInteger (length s1)
+-- Return type of Mol
+seqType :: MolSeq -> String
+seqType (MolSeq _ _ s) = s
 
+-- Calculate evo-distance
+seqDistance :: MolSeq -> MolSeq -> Double
+seqDistance m1 m2
+        |seqType m1 /= seqType m2 = 1.0 -- Throw error if trying to compare diffrent
+        |checkIfDNA (seqSequence m1) = jukesCantor hamming -- DNA use Jukes-Cantor
+        |otherwise = poisson hamming -- Protein use Possion
+        where 
+                hamming = numDifferent (seqSequence m1) (seqSequence m2) / fromIntegral (seqLength m1)
+
+-- Helpers for evo-distance
+-- Number of different characters
 numDifferent :: String -> String -> Double
 numDifferent [] [] = 0
 numDifferent (s1h:s1t) (s2h:s2t)
         |s1h == s2h = numDifferent s1t s2t
         |otherwise = 1 + numDifferent s1t s2t
+
+-- Evo-distance with Jukes-Cantor model
+jukesCantor :: Double -> Double
+jukesCantor hamming 
+        |hamming <= 0.74 = -3/4 * log(1 - 4/3 * hamming)
+        |otherwise = 3.3
+-- Evo-distance with Possion model
+poisson :: Double -> Double
+poisson hamming
+        |hamming <= 0.94 = -19/20 * log(1 - 20 * hamming / 19)
+        |otherwise = 3.7
         
