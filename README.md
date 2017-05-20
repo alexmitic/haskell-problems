@@ -1,5 +1,5 @@
 # haskell-problems
-Solutions for the Programmeringsparadigm assignments 
+Solutions to the Programmeringsparadigm assignments 
 
 #### Finished (passed kattis)
 * Labb F1: Uppvärmning i Haskell
