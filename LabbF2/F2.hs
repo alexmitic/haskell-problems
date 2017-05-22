@@ -1,5 +1,8 @@
 module F2 where
+import Control.Monad
+import Data.List
 
+-- Datatype for a Molecule
 data MolSeq = MolSeq String String String deriving (Show)
 
 checkIfDNA :: String -> Bool
@@ -56,4 +59,33 @@ poisson :: Double -> Double
 poisson hamming
         |hamming <= 0.94 = -19/20 * log(1 - 20 * hamming / 19)
         |otherwise = 3.7
-        
+
+
+-- Data type for a profile of molecules 
+data Profile = Profile [[(Char, Int)]] String Int String deriving (Show)
+
+nucleotides = "ACGT"
+aminoacids = sort "ARNDCEQGHILKMFPSTWYVX"
+
+-- Creates profile from a list of molecules
+makeProfileMatrix :: [MolSeq] -> [[(Char, Int)]]
+makeProfileMatrix [] = error "Empty sequence list"
+makeProfileMatrix sl = res
+  where 
+    t = seqType (head sl)
+    defaults = 
+      if t == "DNA" then
+        zip nucleotides (replicate (length nucleotides) 0) -- If list of DNA, 
+        -- create a list of tupels with all possible letter in DNA paired with a 0
+      else 
+        zip aminoacids (replicate (length aminoacids) 0)   -- Same as above but with  PROTEIN
+    strs = map seqSequence sl -- List of all the sequences 
+    tmp1 = map (map (\x -> ((head x), (length x))) . group . sort)
+               (transpose strs) -- First transpose the list of sequences, 
+               -- which will create a list of lists where the first list contains
+               -- all first letters and so on
+               -- After that sort all the lists,
+               -- group all equal elements in each list
+               -- Then create a tuple consisting of the head of each list and the length
+    equalFst a b = (fst a) == (fst b)
+    res = map sort (map (\l -> unionBy equalFst l defaults) tmp1)
