@@ -89,3 +89,7 @@ makeProfileMatrix sl = res
                -- Then create a tuple consisting of the head of each list and the length
     equalFst a b = (fst a) == (fst b)
     res = map sort (map (\l -> unionBy equalFst l defaults) tmp1)
+
+
+molseqs2profile :: String -> [MolSeq] -> Profile
+molseqs2profile s mols = Profile (makeProfileMatrix mols) (seqType (head mols)) (length mols) s
