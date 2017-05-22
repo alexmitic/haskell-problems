@@ -90,6 +90,12 @@ makeProfileMatrix sl = res
     equalFst a b = (fst a) == (fst b)
     res = map sort (map (\l -> unionBy equalFst l defaults) tmp1)
 
-
+-- Take in a list of molecules, a name and create a profile from it 
 molseqs2profile :: String -> [MolSeq] -> Profile
 molseqs2profile s mols = Profile (makeProfileMatrix mols) (seqType (head mols)) (length mols) s
+
+profileName :: Profile -> String
+profileName (Profile _ _ _ s) = s
+
+profileFrequency :: Profile -> Int -> Char -> Double
+-- profileFrequency (Profile p _ _ _) i c =  
