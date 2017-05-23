@@ -94,8 +94,16 @@ makeProfileMatrix sl = res
 molseqs2profile :: String -> [MolSeq] -> Profile
 molseqs2profile s mols = Profile (makeProfileMatrix mols) (seqType (head mols)) (length mols) s
 
+-- Getter for namn of a profile
 profileName :: Profile -> String
 profileName (Profile _ _ _ s) = s
 
+-- Return the relativ frequency of a character
 profileFrequency :: Profile -> Int -> Char -> Double
--- profileFrequency (Profile p _ _ _) i c =  
+profileFrequency (Profile p _ numS _) i c = getOccorences (p !! i) c / fromIntegral numS
+
+-- Helper for profileFrequency. Gets the second value from a tuple after finding the correct one
+getOccorences :: [(Char, Int)] -> Char -> Double
+getOccorences (x:xs) c
+        | fst x == c = fromIntegral (snd x)
+        | otherwise = getOccorences xs c
