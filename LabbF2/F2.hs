@@ -107,3 +107,11 @@ getOccorences :: [(Char, Int)] -> Char -> Double
 getOccorences (x:xs) c
         | fst x == c = fromIntegral (snd x)
         | otherwise = getOccorences xs c
+
+
+-- profileDistance :: Profile -> Profile -> Double
+-- profileDistance (Profile m1 typ1 _ _) (Profile m2 typ2 _ _)
+--         |m1 /= m2 = error "Not matching"
+
+
+
