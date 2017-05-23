@@ -81,7 +81,7 @@ fam5 = [   ("5A1_Human","DQTFISIVDWARRCMVFKELEVADQMTLLQNCWSELLVFDHIYRQVQHLLVTGQE
 
 -- These functions gives a lot of output...
 famseqs = zip ["fam1", "fam2", "fam3", "fam4", "fam5"] (map seqdata [fam1, fam2, fam3, fam4, fam5])
--- profiles = [molseqs2profile name fam | (name, fam) <- famseqs]
+profiles = [molseqs2profile name fam | (name, fam) <- famseqs]
 
       
 -- A few quick tests
@@ -101,13 +101,13 @@ seqDistTest3 = snabbtest seqDistance (seqdata foxp4)
 seqDistTest4 = snabbtest seqDistance (seqdata fam5)
 
 
--- test2 = molseqs2profile "profile for figure 1" (seqdata figur)
+test2 = molseqs2profile "profile for figure 1" (seqdata figur)
 
--- -- Should return 0.28571542857...
--- profileFreqTest1 = profileFrequency (head profiles) 17 'V'
+-- Should return 0.28571542857...
+profileFreqTest1 = profileFrequency (head profiles) 17 'V'
 
--- -- Should return 0.0
--- profileFreqTest2 = profileFrequency (head profiles) 42 'F'
+-- Should return 0.0
+profileFreqTest2 = profileFrequency (head profiles) 42 'F'
 
 -- -- Should return 171.14285714...
 -- profileDistTest = snabbtest profileDistance profiles
