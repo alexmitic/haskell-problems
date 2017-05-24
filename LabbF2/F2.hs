@@ -109,9 +109,24 @@ getOccorences (x:xs) c
         | otherwise = getOccorences xs c
 
 
--- profileDistance :: Profile -> Profile -> Double
--- profileDistance (Profile m1 typ1 _ _) (Profile m2 typ2 _ _)
---         |m1 /= m2 = error "Not matching"
+profileDistance :: Profile -> Profile -> Double
+profileDistance (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
+         | m1 /= m2 = error "Not matching types"
+         | otherwise = calculateDist typen lengthWord (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
+         where
+           typen =
+             if typ1 == "DNA" then
+                nucleotides
+             else
+                aminoacids
 
+           lengthWord = length m1 
 
+calculateDist :: String -> Int -> Profile -> Profile -> Double
+calculateDist s n p1 p2 
+        | n == 0 = 0
+        | otherwise = helperCharcther s n p1 p2 + helperCharcther s (n - 1) p1 p2  
 
+helperCharcther :: String -> Int -> Profile -> Profile -> Double 
+helperCharcther "" _ _ _ = 0
+helperCharcther (x:xs) n p1 p2 = profileFrequency p1 n x + profileFrequency p2 n x + helperCharcther xs n p1 p2
