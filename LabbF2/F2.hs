@@ -35,7 +35,7 @@ seqType (MolSeq _ _ s) = s
 -- Calculate evo-distance
 seqDistance :: MolSeq -> MolSeq -> Double
 seqDistance m1 m2
-        |seqType m1 /= seqType m2 = 1.0 -- Throw error if trying to compare diffrent
+        |seqType m1 /= seqType m2 = error "Not same typ!"
         |checkIfDNA (seqSequence m1) = jukesCantor hamming -- DNA use Jukes-Cantor
         |otherwise = poisson hamming -- Protein use Possion
         where 
@@ -109,12 +109,12 @@ getOccorences (x:xs) c
         | otherwise = getOccorences xs c
 
 
-profileDistance :: Profile -> Profile -> Double
+profileDistance :: Profile -> Profile -> Double 
 profileDistance (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
-         | typ1 /= typ2 = error "Not matching types"
+         | typ1 /= typ2 = error "Not matching types" -- If comparing diffrent matrix
          | otherwise = calculateDist typen lengthWord (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
          where
-           typen =
+           typen = -- String with all possible characters 
              if typ1 == "DNA" then
                 nucleotides
              else
@@ -124,9 +124,30 @@ profileDistance (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
 
 calculateDist :: String -> Int -> Profile -> Profile -> Double
 calculateDist s n p1 p2 
-        | n == 0 = 0
-        | otherwise = helperCharcther s n p1 p2 + helperCharcther s (n - 1) p1 p2  
+                | n == (-1) = 0 -- Do from last to first position 
+                | otherwise = helperCharcther s n p1 p2 + calculateDist s (n - 1) p1 p2
 
 helperCharcther :: String -> Int -> Profile -> Profile -> Double 
-helperCharcther "" _ _ _ = 0
+helperCharcther "" _ _ _ = 0 --For all possible letters
 helperCharcther (x:xs) n p1 p2 = abs(profileFrequency p1 n x - profileFrequency p2 n x) + helperCharcther xs n p1 p2
+
+class Evol object where
+        name :: object -> String
+        distance :: object -> object -> Double
+
+        distanceMatrix :: [object] -> [(String, String, Double)]  
+        distanceMatrix [] = []
+        distanceMatrix n = distanceOneObject n (head n) ++ distanceMatrix (tail n)
+
+        distanceOneObject :: [object] -> object -> [(String, String, Double)]
+        distanceOneObject [] _ = []
+        distanceOneObject (x:xs) n = (name n, name x, abs(distance x n)) : distanceOneObject xs n
+        
+
+instance Evol MolSeq where
+ name = seqName
+ distance = seqDistance
+ 
+instance Evol Profile where
+ name = profileName
+ distance = profileDistance

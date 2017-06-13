@@ -4,9 +4,11 @@ import Data.Char
 
 -- Fibonacci
 fib :: Integer -> Integer
-fib n 
-   | n < 2 = n
-   | otherwise = fib (n - 1) + fib (n - 2)
+fib n  
+    | n < 0 = n
+    | otherwise = fiblist !! fromIntegral n
+        where
+            fiblist = 0 : 1 : zipWith (+) fiblist (tail fiblist)
 
 -- Rövarspråk
 rovarsprak :: String -> String

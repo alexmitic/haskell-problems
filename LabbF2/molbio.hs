@@ -113,21 +113,21 @@ profileFreqTest2 = profileFrequency (head profiles) 42 'F'
 profileDistTest = snabbtest profileDistance profiles
 
 
--- -- Should produce the following matrix (values rounded):
--- --         human   cow     dog     rat     mouse   frog
--- -- human     0.0   0.090   0.055   0.051   0.055   0.245
--- -- cow             0.0     0.119   0.126   0.124   0.314
--- -- dog                     0.0     0.090   0.090   0.272
--- -- rat                             0.0     0.017   0.256
--- -- mouse                                   0.0     0.259
--- -- frog                                            0.0
--- distMatrixTest1 = distanceMatrix (seqdata foxp4)
+-- Should produce the following matrix (values rounded):
+--         human   cow     dog     rat     mouse   frog
+-- human     0.0   0.090   0.055   0.051   0.055   0.245
+-- cow             0.0     0.119   0.126   0.124   0.314
+-- dog                     0.0     0.090   0.090   0.272
+-- rat                             0.0     0.017   0.256
+-- mouse                                   0.0     0.259
+-- frog                                            0.0
+distMatrixTest1 = distanceMatrix (seqdata foxp4)
 
--- -- Should produce the following matrix (values rounded):
--- --        fam1    fam2    fam3    fam4    fam5
--- ---fam1     0.0   171.1   176.8   167.2   179.3
--- ---fam2             0.0   151.7   161.3   151.2
--- ---fam3                     0.0   160.0   154.1
--- ---fam4                             0.0   167.0
--- ---fam5                                     0.0
--- distMatrixTest2 = distanceMatrix profiles
+-- Should produce the following matrix (values rounded):
+--        fam1    fam2    fam3    fam4    fam5
+---fam1     0.0   171.1   176.8   167.2   179.3
+---fam2             0.0   151.7   161.3   151.2
+---fam3                     0.0   160.0   154.1
+---fam4                             0.0   167.0
+---fam5                                     0.0
+distMatrixTest2 = distanceMatrix profiles
