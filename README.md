@@ -3,12 +3,12 @@ Solutions to the Programmeringsparadigm assignments
 
 #### Finished (passed kattis)
 * Labb F1: Uppvärmning i Haskell
-
-#### In progress
 * Labb F2: Molekylärbiologi i Haskell
 
-#### Left to complete
+#### In progress
 * Labb F3: Evolutionära träd och I/O
+
+#### Left to complete
 * Labb L1: Uppvärmning i Prolog
 * Labb L2: Konspirationsdetektion
 * Labb L3: Redovisningsschemaläggning
