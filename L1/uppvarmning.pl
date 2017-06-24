@@ -38,11 +38,13 @@ medellangd(List, AvgLength) :- sum(List, Chars, 0, Words, 0), AvgLength is Chars
 sum([], Chars, Chars, Words, Words). % If calculated num words and letter equals the given input 
 
 sum([Head|Tail], Chars, CharCounter, Words, WordCounter) :- % If letter, increment CharCounter
-        char_type(Head, alpha),
+        char_code(Letter, Head),
+        char_type(Letter, alpha),
         IncCh is CharCounter + 1, 
         sum(Tail, Chars, IncCh, Words, WordCounter).
 
 sum([Head|Tail], Chars, CharCounter, Words, WordCounter) :- % If not letter, increment WordCounter
-        not(char_type(Head, alpha)),
+        char_code(Letter, Head),
+        not(char_type(Letter, alpha)),
         IncWords is WordCounter + 1, 
         sum(Tail, Chars, CharCounter, Words, IncWords).
