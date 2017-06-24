@@ -1,4 +1,4 @@
-# haskell-problems
+# paradigm-problems
 Solutions to the Programmeringsparadigm assignments 
 
 #### Finished (passed kattis)

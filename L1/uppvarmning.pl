@@ -1,13 +1,13 @@
 % Fibonacci
 
 % Basecases
-fib(0, 0).
-fib(1, 1).
+fib(0, 0):- !.
+fib(1, 1):- !.
 
 % If not basecases send to helper with third Fib number as start
 fib(N, F) :- N1 is N - 2, fib(1, 1, N1, F).
 
-fib(_, F, 0, F). % Basecase for helper
+fib(_, F, 0, F) :- !. % Basecase for helper
 
 % Otherwise calc Fib numbers linearly until finding the correct           
 fib(A, B, N, F) :- 
@@ -19,7 +19,7 @@ fib(A, B, N, F) :-
 % Rovarsprak
 
 % Basecases
-rovarsprak([], []). 
+rovarsprak([], []) :- !. 
 
 rovarsprak([Head|TailText], [Head|TailRov]) :-  % If first is the same
         member(Head, [97, 101, 111, 117, 121]), % And is a vokal
@@ -31,3 +31,18 @@ rovarsprak([Head|TailText], [Head, 111, Head | TailRov]) :- % If first in text i
 
 % Medellangd
 
+medellangd(List, AvgLength) :- sum(List, Chars, 0, Words, 0), AvgLength is Chars / Words, !. 
+    
+% Helper that calculates number of words and number of letters
+
+sum([], Chars, Chars, Words, Words). % If calculated num words and letter equals the given input 
+
+sum([Head|Tail], Chars, CharCounter, Words, WordCounter) :- % If letter, increment CharCounter
+        char_type(Head, alpha),
+        IncCh is CharCounter + 1, 
+        sum(Tail, Chars, IncCh, Words, WordCounter).
+
+sum([Head|Tail], Chars, CharCounter, Words, WordCounter) :- % If not letter, increment WordCounter
+        not(char_type(Head, alpha)),
+        IncWords is WordCounter + 1, 
+        sum(Tail, Chars, CharCounter, Words, IncWords).
