@@ -6,10 +6,10 @@ Solutions to the Programmeringsparadigm assignments
 * Labb F2: Molekylärbiologi i Haskell
 
 #### In progress
-* Labb F3: Evolutionära träd och I/O
+* Labb L1: Uppvärmning i Prolog
 
 #### Left to complete
-* Labb L1: Uppvärmning i Prolog
+* Labb F3: Evolutionära träd och I/O
 * Labb L2: Konspirationsdetektion
 * Labb L3: Redovisningsschemaläggning
 * Labb S1: Reguljära Uttryck
