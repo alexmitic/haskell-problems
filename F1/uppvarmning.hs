@@ -13,9 +13,12 @@ fib n
 -- Rövarspråk
 rovarsprak :: String -> String
 rovarsprak [] = []
-rovarsprak (x:xs) --Separate head and tail
-        | x `notElem` "aeiouy"   = x:'o':x: rovarsprak xs -- If head not vocal
-        | otherwise              = x: rovarsprak xs
+rovarsprak x = map helperSprak x
+
+helperSprak :: Char -> Char
+helperSprak s 
+        | s `notElem` "aeiouy"   = s:'o':s
+        | otherwise              = s
 
 -- Omvändt rövarspråk
 karpsravor :: String -> String
