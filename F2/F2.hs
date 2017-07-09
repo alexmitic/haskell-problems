@@ -1,6 +1,7 @@
 module F2 where
 import Control.Monad
 import Data.List
+import Debug.Trace
 
 -- Datatype for a Molecule
 data MolSeq = MolSeq String String String deriving (Show)
@@ -34,12 +35,12 @@ seqType (MolSeq _ _ s) = s
 
 -- Calculate evo-distance
 seqDistance :: MolSeq -> MolSeq -> Double
-seqDistance m1 m2
-        |seqType m1 /= seqType m2 = error "Not same typ!"
-        |checkIfDNA (seqSequence m1) = jukesCantor hamming -- DNA use Jukes-Cantor
+seqDistance (MolSeq _ s1 t1) (MolSeq _ s2 t2)
+        |t1 /= t2 = error "Not same typ!"
+        |checkIfDNA s1 = jukesCantor hamming -- DNA use Jukes-Cantor
         |otherwise = poisson hamming -- Protein use Possion
         where 
-                hamming = numDifferent (seqSequence m1) (seqSequence m2) / fromIntegral (seqLength m1)
+                hamming = numDifferent s1 s2 / fromIntegral (length s1)
 
 -- Helpers for evo-distance
 -- Number of different characters
@@ -52,12 +53,12 @@ numDifferent (s1h:s1t) (s2h:s2t)
 -- Evo-distance with Jukes-Cantor model
 jukesCantor :: Double -> Double
 jukesCantor hamming 
-        |hamming <= 0.74 = -3/4 * log(1 - 4/3 * hamming)
+        |hamming <= 0.74 = trace(show hamming) (-3/4) * log(1 - 4/3 * hamming)
         |otherwise = 3.3
 -- Evo-distance with Possion model
 poisson :: Double -> Double
 poisson hamming
-        |hamming <= 0.94 = -19/20 * log(1 - 20 * hamming / 19)
+        |hamming <= 0.94 = trace(show hamming) (-19/20) * log(1 - 20 * hamming / 19)
         |otherwise = 3.7
 
 
@@ -112,24 +113,29 @@ getOccorences (x:xs) c
 profileDistance :: Profile -> Profile -> Double 
 profileDistance (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
          | typ1 /= typ2 = error "Not matching types" -- If comparing diffrent matrix
-         | otherwise = calculateDist typen lengthWord (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
-         where
-           typen = -- String with all possible characters 
-             if typ1 == "DNA" then
-                nucleotides
-             else
-                aminoacids
+         | otherwise = calculateDist m1 m2 (fromIntegral num1) (fromIntegral num2)
 
-           lengthWord = length m2 - 1 
+-- calculateDist :: String -> Int -> Profile -> Profile -> Double
+-- calculateDist s n p1 p2 
+--                 | n == (-1) = 0 -- Do from last to first position 
+--                 | otherwise = helperCharcther s n p1 p2 + calculateDist s (n - 1) p1 p2
 
-calculateDist :: String -> Int -> Profile -> Profile -> Double
-calculateDist s n p1 p2 
-                | n == (-1) = 0 -- Do from last to first position 
-                | otherwise = helperCharcther s n p1 p2 + calculateDist s (n - 1) p1 p2
+-- helperCharcther :: String -> Int -> Profile -> Profile -> Double 
+-- helperCharcther "" _ _ _ = 0 --For all possible letters
+-- helperCharcther (x:xs) n p1 p2 = abs(profileFrequency p1 n x - profileFrequency p2 n x) + helperCharcther xs n p1 p2
 
-helperCharcther :: String -> Int -> Profile -> Profile -> Double 
-helperCharcther "" _ _ _ = 0 --For all possible letters
-helperCharcther (x:xs) n p1 p2 = abs(profileFrequency p1 n x - profileFrequency p2 n x) + helperCharcther xs n p1 p2
+
+
+calculateDist :: [[(Char, Int)]] -> [[(Char, Int)]] -> Double -> Double -> Double
+calculateDist [] [] _ _ = 0
+calculateDist (h1:t1) (h2:t2) num1 num2 = helperCharcther h1 h2 num1 num2 + calculateDist t1 t2 num1 num2
+
+helperCharcther :: [(Char, Int)] -> [(Char, Int)] -> Double -> Double -> Double
+helperCharcther m1 m2 num1 num2 = sum (zipWith (\tup1 tup2 -> abs(((fromIntegral (snd tup1)) / num1) - ((fromIntegral (snd tup2)) / num2))) m1 m2)
+
+
+
+
 
 class Evol object where
         name :: object -> String
