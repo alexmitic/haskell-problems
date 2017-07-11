@@ -1,7 +1,6 @@
 module F2 where
 import Control.Monad
-import Data.List
-import Debug.Trace
+import Data.List 
 
 -- Datatype for a Molecule
 data MolSeq = MolSeq String String String deriving (Show)
@@ -47,18 +46,18 @@ seqDistance (MolSeq _ s1 t1) (MolSeq _ s2 t2)
 numDifferent :: String -> String -> Double
 numDifferent [] [] = 0
 numDifferent (s1h:s1t) (s2h:s2t)
-        |s1h == s2h = numDifferent s1t s2t
-        |otherwise = 1 + numDifferent s1t s2t
+        |s1h == s2h = numDifferent s1t s2t -- If same skip to next
+        |otherwise = 1 + numDifferent s1t s2t 
 
 -- Evo-distance with Jukes-Cantor model
 jukesCantor :: Double -> Double
 jukesCantor hamming 
-        |hamming <= 0.74 = trace(show hamming) (-3/4) * log(1 - 4/3 * hamming)
+        |hamming <= 0.74 = (-3/4) * log(1 - 4/3 * hamming)
         |otherwise = 3.3
 -- Evo-distance with Possion model
 poisson :: Double -> Double
 poisson hamming
-        |hamming <= 0.94 = trace(show hamming) (-19/20) * log(1 - 20 * hamming / 19)
+        |hamming <= 0.94 = (-19/20) * log(1 - 20 * hamming / 19)
         |otherwise = 3.7
 
 
@@ -66,7 +65,7 @@ poisson hamming
 data Profile = Profile [[(Char, Int)]] String Int String deriving (Show)
 
 nucleotides = "ACGT"
-aminoacids = sort "ARNDCEQGHILKMFPSTWYVX"
+aminoacids = "ACDEFGHIKLMNPQRSTVWXY"
 
 -- Creates profile from a list of molecules
 makeProfileMatrix :: [MolSeq] -> [[(Char, Int)]]
@@ -101,41 +100,47 @@ profileName (Profile _ _ _ s) = s
 
 -- Return the relativ frequency of a character
 profileFrequency :: Profile -> Int -> Char -> Double
-profileFrequency (Profile p _ numS _) i c = getOccorences (p !! i) c / fromIntegral numS
+profileFrequency (Profile p typ numS _) i c 
+        | typ == "DNA" = getOccorencesDna (p !! i) c / fromIntegral numS
+        | otherwise = getOccorencesProtein (p !! i) c / fromIntegral numS
 
 -- Helper for profileFrequency. Gets the second value from a tuple after finding the correct one
-getOccorences :: [(Char, Int)] -> Char -> Double
-getOccorences (x:xs) c
-        | fst x == c = fromIntegral (snd x)
-        | otherwise = getOccorences xs c
+-- Really ugly code but for performance
+getOccorencesDna :: [(Char, Int)] -> Char -> Double
+getOccorencesDna list c
+        | c == 'A' = fromIntegral (snd (list !! 0))
+        | c == 'C' = fromIntegral (snd (list !! 1))
+        | c == 'G' = fromIntegral (snd (list !! 2))
+        | otherwise = fromIntegral (snd (list !! 3))
 
+getOccorencesProtein :: [(Char, Int)] -> Char -> Double
+getOccorencesProtein list c
+        | c == 'A' = fromIntegral (snd (list !! 0))
+        | c == 'C' = fromIntegral (snd (list !! 1))
+        | c == 'D' = fromIntegral (snd (list !! 2))
+        | c == 'E' = fromIntegral (snd (list !! 3))
+        | c == 'F' = fromIntegral (snd (list !! 4))
+        | c == 'G' = fromIntegral (snd (list !! 5))
+        | c == 'H' = fromIntegral (snd (list !! 6))
+        | c == 'I' = fromIntegral (snd (list !! 7))
+        | c == 'K' = fromIntegral (snd (list !! 8))
+        | c == 'L' = fromIntegral (snd (list !! 9))
+        | c == 'M' = fromIntegral (snd (list !! 10))
+        | c == 'N' = fromIntegral (snd (list !! 11))
+        | c == 'P' = fromIntegral (snd (list !! 12))
+        | c == 'Q' = fromIntegral (snd (list !! 13))
+        | c == 'R' = fromIntegral (snd (list !! 14))
+        | c == 'S' = fromIntegral (snd (list !! 15))
+        | c == 'T' = fromIntegral (snd (list !! 16))
+        | c == 'V' = fromIntegral (snd (list !! 17))
+        | c == 'W' = fromIntegral (snd (list !! 18))
+        | c == 'X' = fromIntegral (snd (list !! 19))
+        | otherwise = fromIntegral (snd (list !! 20))
 
 profileDistance :: Profile -> Profile -> Double 
 profileDistance (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
          | typ1 /= typ2 = error "Not matching types" -- If comparing diffrent matrix
-         | otherwise = calculateDist m1 m2 (fromIntegral num1) (fromIntegral num2)
-
--- calculateDist :: String -> Int -> Profile -> Profile -> Double
--- calculateDist s n p1 p2 
---                 | n == (-1) = 0 -- Do from last to first position 
---                 | otherwise = helperCharcther s n p1 p2 + calculateDist s (n - 1) p1 p2
-
--- helperCharcther :: String -> Int -> Profile -> Profile -> Double 
--- helperCharcther "" _ _ _ = 0 --For all possible letters
--- helperCharcther (x:xs) n p1 p2 = abs(profileFrequency p1 n x - profileFrequency p2 n x) + helperCharcther xs n p1 p2
-
-
-
-calculateDist :: [[(Char, Int)]] -> [[(Char, Int)]] -> Double -> Double -> Double
-calculateDist [] [] _ _ = 0
-calculateDist (h1:t1) (h2:t2) num1 num2 = helperCharcther h1 h2 num1 num2 + calculateDist t1 t2 num1 num2
-
-helperCharcther :: [(Char, Int)] -> [(Char, Int)] -> Double -> Double -> Double
-helperCharcther m1 m2 num1 num2 = sum (zipWith (\tup1 tup2 -> abs(((fromIntegral (snd tup1)) / num1) - ((fromIntegral (snd tup2)) / num2))) m1 m2)
-
-
-
-
+         | otherwise = sum (zipWith (\list1 list2 -> sum (zipWith (\tup1 tup2 -> abs(((fromIntegral (snd tup1)) / (fromIntegral num1)) - ((fromIntegral (snd tup2)) / (fromIntegral num2)))) list1 list2)) m1 m2) 
 
 class Evol object where
         name :: object -> String
@@ -143,12 +148,7 @@ class Evol object where
 
         distanceMatrix :: [object] -> [(String, String, Double)]  
         distanceMatrix [] = []
-        distanceMatrix n = distanceOneObject n (head n) ++ distanceMatrix (tail n)
-
-        distanceOneObject :: [object] -> object -> [(String, String, Double)]
-        distanceOneObject [] _ = []
-        distanceOneObject (x:xs) n = (name n, name x, abs(distance x n)) : distanceOneObject xs n
-        
+        distanceMatrix list = [(name (head l), name y, abs(distance (head l) y)) | l <- tails list, y <- l]
 
 instance Evol MolSeq where
  name = seqName
