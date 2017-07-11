@@ -39,4 +39,4 @@ def parentheses():
 # Followed by three numbers in ascending order 
 # And ending with zero or more non-ascending numbers
 def sorted3():
-    return "^[\d]*(01[2-9]|[0-1]2[3-9]|[0-2]3[4-9]|[0-3]4[5-9]|[0-4]5[6-9]|[0-5]6[7-9]|[0-6]7[8-9]|[0-7]89)[\d]*$"
+    return "^[\d]*(?:01[2-9]|[0-1]2[3-9]|[0-2]3[4-9]|[0-3]4[5-9]|[0-4]5[6-9]|[0-5]6[7-9]|[0-6]7[8-9]|[0-7]89)[\d]*$"

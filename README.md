@@ -16,4 +16,6 @@ Solutions to the Programmeringsparadigm assignments
 * Labb S4
 * Labb Inet
 * Labb X1
+  - Bus Numbers (Haskell)
+  - Bus Numbers (Prolog)
 * Labb X2
