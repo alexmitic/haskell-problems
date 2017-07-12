@@ -12,9 +12,7 @@ checkIfDNA (x:xs)
         | otherwise = False -- If not DNA
 
 string2seq :: String -> String -> MolSeq
-string2seq n s
-        | checkIfDNA s = MolSeq n s "DNA" -- If sequence is DNA
-        | otherwise = MolSeq n s "PROTEIN" -- Protein
+string2seq n s = MolSeq n s "DNA" 
 
 -- Return name of MolSeq
 seqName :: MolSeq -> String
