@@ -6,6 +6,8 @@ Solutions to the Programmeringsparadigm assignments
 * Labb F2
 * Labb L1
 * Labb S1
+* Labb X1
+  - Bus Numbers (Haskell)
 
 #### Left to complete
 * Labb F3
@@ -16,6 +18,5 @@ Solutions to the Programmeringsparadigm assignments
 * Labb S4
 * Labb Inet
 * Labb X1
-  - Bus Numbers (Haskell)
   - Bus Numbers (Prolog)
 * Labb X2
