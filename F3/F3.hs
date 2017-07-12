@@ -7,11 +7,7 @@ main = do
     content <- getContents
     length content `seq` return ()
     let molekyler =  mols (words content)
-    let test = testaaaa molekyler
     let dist = distMa molekyler
-    print test
-    putStrLn ""
-    putStrLn ""
     print dist
 
 
@@ -40,8 +36,3 @@ findDist :: String -> [(String, Double)] -> Double
 findDist s (x:xs)
             | s == fst x = snd x
             | otherwise = findDist s xs 
-
-
-testaaaa :: [MolSeq] -> [(String, String, Double)]
-testaaaa [] = []
-testaaaa list = [(name (head l), name y, abs(distance (head l) y)) | l <- tails list, y <- l]
