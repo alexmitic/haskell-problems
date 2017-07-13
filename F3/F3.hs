@@ -7,28 +7,28 @@ main = do
     content <- getContents
     length content `seq` return ()
     let molekyler =  mols (words content)
-    let firstDist = seqDistMatrix molekyler molekyler
-    let firstSist = sistMatrix firstDist
 
-    print firstDist
-    putStrLn ""
-    putStrLn ""
-    putStrLn ""
-    print firstSist
+    let dist1 = seqDistMatrix molekyler
+    let unit1 = firstUnit molekyler
 
--- Coverts list of name and seq to list of MolSeqs
-mols :: [String] -> [MolSeq]
-mols [] = []
-mols (x:xs) = string2seq x (head xs) : mols (tail xs)
+    putStrLn ("(" ++ (concat (runEvo dist1 unit1 (length molekyler))) ++ ")")
 
--- Given list of MolSeqs returns all distances 
--- according to formula
-seqDistMatrix :: [MolSeq] -> [MolSeq] -> [[(String, String, Double)]]
-seqDistMatrix [] _ = []
-seqDistMatrix element list = seqDistMatrixOneRow (head element) list : seqDistMatrix (tail element) list 
+--------------------------------------------General-----------------------------------------------------
 
-seqDistMatrixOneRow :: MolSeq -> [MolSeq] -> [(String, String, Double)]
-seqDistMatrixOneRow element list = map (\x -> (seqName element, seqName x, abs(seqDistance element x))) list
+
+runEvo :: [[(String, String, Double)]] -> [String] -> Int -> [String]
+runEvo dist unit n
+            | n < 4 = unit
+            | otherwise = runEvo newDist newUnit (n - 1)
+        where
+            sist = sistMatrix dist
+            lowest = findLowestSist sist
+
+            a = first lowest
+            b = second lowest
+
+            newUnit = updateString a b unit
+            newDist = updateDist dist (filter (\n -> n /= ",") newUnit) (head newUnit) a b
 
 
 -- Given distance list return sist list
@@ -40,21 +40,100 @@ sistMatrix list = map (\n -> map (\x -> if (first x) /= (second x) then (first x
 
 -- Returns distances for all Mols
 totalDist :: [[(String, String, Double)]] -> [(String, Double)]
-totalDist list = map (\n -> (first (head n), sum (map (\x -> third x) n))) list
+totalDist list = map (\n -> (first (head n), totalDistHelper list n)) list
+
+totalDistHelper :: [[(String, String, Double)]] -> [(String, String, Double)] -> Double
+totalDistHelper wList l 
+                | length wList == length l = foldl (\n x -> n + (third x)) 0 l
+                | otherwise = (foldl (\n x -> n + (third x)) 0 l) + totalDistSpread wList ((length wList) - (length l)) (((length wList) - (length l)) - 1) 
+
+totalDistSpread :: [[(String, String, Double)]] -> Int -> Int -> Double
+totalDistSpread list index indexToGo
+                        | indexToGo == -1 = 0
+                        | otherwise = (third ((list !! (indexToGo)) !! (index - indexToGo))) + totalDistSpread list index (indexToGo - 1)
 
 
--------------------------- Helpers -------------------------------
+-- Given a b and whole unit, it adds (a,b) to unit and removes a b
+updateString :: String -> String -> [String] -> [String]
+updateString a b unit = newRoot : (updateStringHelper (filter (\n -> n /= a && n /= b && n /= ",") unit))
+                where
+                    newRoot = "(" ++ a ++ "," ++ b ++ ")"
+
+updateStringHelper :: [String] -> [String]
+updateStringHelper [] = []
+updateStringHelper (x:xs) = "," : x : updateStringHelper xs
+
+-- A better and faster soulution must exist
+findLowestSist :: [[(String, String, Double)]] -> (String, String, Double)
+findLowestSist l = foldl (\a b -> if (third a) <= (third (foldl (\n x -> if (third n) <= (third x) then n else x) (head b) b)) then a else (foldl (\n x -> if (third n) <= (third x) then n else x) (head b) b)) (head (head l)) l
+
+
+updateDist :: [[(String, String, Double)]] -> [String] -> String -> String -> String -> [[(String, String, Double)]]
+updateDist dist toPrint root a b = (map (\n -> if (head n) == root then updateDistRoot dist n root a b else updateDistNonRoot dist n (head n)) unit)
+        where 
+            unit = filter (\n -> n /= []) (tails toPrint)
+
+updateDistRoot :: [[(String, String, Double)]] -> [String] -> String -> String -> String -> [(String, String, Double)]
+updateDistRoot _ [] _ _ _ = []
+updateDistRoot lookUpL (x:xs) temp a b = (temp, x, (((findDistPair a x lookUpL) + (findDistPair b x lookUpL)) / 2)) : updateDistRoot lookUpL xs temp a b
+
+updateDistNonRoot :: [[(String, String, Double)]] -> [String] -> String -> [(String, String, Double)]
+updateDistNonRoot _ [] _ = []
+updateDistNonRoot lookUpL (x:xs) temp = (temp, x, findDistPair temp x lookUpL) : updateDistNonRoot lookUpL xs temp
+
+
+findDistPair :: String -> String -> [[(String, String, Double)]] -> Double
+findDistPair _ _ [] = 0
+findDistPair a b (x:xs)
+                | a == first (head x) || b == first (head x) = findDistPairHelper a b x xs
+                | otherwise = findDistPair a b xs
+
+findDistPairHelper :: String -> String -> [(String, String, Double)] -> [[(String, String, Double)]] -> Double
+findDistPairHelper a b [] rest = findDistPair a b rest
+findDistPairHelper a b (x:xs) rest
+                | (a == first x && b == second x) || (b == first x && a == second x) = third x
+                | otherwise = findDistPairHelper a b xs rest
+
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- Helpers --------------------------------------------------
+-- Coverts list of name and seq to list of MolSeqs
+mols :: [String] -> [MolSeq]
+mols [] = []
+mols (x:xs) = string2seq x (head xs) : mols (tail xs)
+
+
+-- Given list of MolSeqs returns all distances 
+-- according to formula
+seqDistMatrix :: [MolSeq] -> [[(String, String, Double)]]
+seqDistMatrix [] = []
+seqDistMatrix list = filter (\n -> n /= []) (map (\n -> seqDistMatrixOneRow (head n) n) (tails list))
+
+seqDistMatrixOneRow :: MolSeq -> [MolSeq] -> [(String, String, Double)]
+seqDistMatrixOneRow element list = map (\x -> (seqName element, seqName x, abs(seqDistance element x))) list
+
+
 findDist :: String -> [(String, Double)] -> Double
 findDist s (x:xs)
             | s == fst x = snd x
             | otherwise = findDist s xs 
 
+
 first :: (String, String, Double) -> String
 first (n, _, _) = n
+
 
 second :: (String, String, Double) -> String
 second (_, n, _) = n
 
+
 third :: (String, String, Double) -> Double
 third (_, _, n) = n
-------------------------------------------------------------------
+
+
+firstUnit :: [MolSeq] -> [String]
+firstUnit l = (seqName (head l)) : (firstUnitHelper (tail l))
+
+firstUnitHelper :: [MolSeq] -> [String]
+firstUnitHelper [] = []
+firstUnitHelper (x:xs) = "," : seqName x : firstUnitHelper xs
+-------------------------------------------------------------------------------------------------------------------
