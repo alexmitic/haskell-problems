@@ -3,5 +3,8 @@ public enum TokenType {
     UP, DOWN, FORW, BACK, LEFT, RIGHT, COLOR, REP,
 
     // Single - character
-    QUOTE, HEX, NUM, ENDOFEXPRESSION
+    QUOTE, HEX, NUM, END_OF_EXPRESSION,
+
+    // Rest
+    INVALID_CHARACTER
 }

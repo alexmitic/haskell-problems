@@ -1,44 +1,42 @@
-import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //TODO Try to use array instead of arraylist for better performance
-//TODO Figure out why it wont print tokens
 
 /**
  * Lexer that reads input through a DataInputStream and
  * creates list of tokens from the input
  */
 public class Lexer {
-
-    private DataInputStream in;
-    private byte[] buff;
-    private int numBytesRead;
     private List<Token> tokenList;
+    InputStream in;
 
-    public Lexer() throws SyntaxException, IOException {
-        in = new DataInputStream(System.in);
+    public Lexer(InputStream in) throws SyntaxException, IOException {
         tokenList = new ArrayList<>();
-        buff = new byte[1048576];
-        numBytesRead = 0;
-
+        this.in = in;
         tokenize(readIntoBuffer());
     }
 
     private String readIntoBuffer() throws IOException {
-        int offset = 0;
+        char[] buff = new char[1048576];;
+        int numRead = 0;
+        Reader reader = new InputStreamReader(in);
+        StringBuilder sb = new StringBuilder();
 
         while (true) { // Keep read until EOF
-            numBytesRead = in.read(buff);
+            numRead = reader.read(buff);
 
-            if (numBytesRead == -1) break;
-            else offset += numBytesRead;
+            if (numRead == -1) break;
+            else sb.append(buff, 0, numRead);
         }
 
-        return new String(buff, 0, offset); // Return the input in a string
+        return sb.toString(); // Return the input in a string
     }
 
     private void tokenize(String input) throws SyntaxException {
@@ -48,14 +46,12 @@ public class Lexer {
                 "%.*" +
                 "|up" +
                 "|down" +
-                "|(?<=^|.|\\\"|\\s)forw(?=\\s+[0-9]+|(\\s*%.*\\n\\s*)+[0-9]+)" +
-                "|(?<=^|.|\\\"|\\s)back(?=\\s+[0-9]+|(\\s*%.*\\n\\s*)+[0-9]+)" +
-                "|(?<=^|.|\\\"|\\s)left(?=\\s+[0-9]+|(\\s*%.*\\n\\s*)+[0-9]+)" +
-                "|(?<=^|.|\\\"|\\s)right(?=\\s+[0-9]+|(\\s*%.*\\n\\s*)+[0-9]+)" +
-                "|(?<=^|.|\\\"|\\s)color(?=\\s+#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})" +
-                "|(\\s*%.*\\n\\s*)+#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}))" +
-
-                "|(?<=^|.|\\\"|\\s)rep(?=\\s+[0-9]+\\s+|(\\s*%.*\\n\\s*)+[0-9]+(\\s*%.*\\n)*\\s*)" +
+                "|(?<=^|\\.|\\\"|\\s)forw(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
+                "|(?<=^|\\.|\\\"|\\s)back(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
+                "|(?<=^|\\.|\\\"|\\s)left(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
+                "|(?<=^|\\.|\\\"|\\s)right(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
+                "|(?<=^|\\.|\\\"|\\s)color(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
+                "|(?<=^|\\.|\\\"|\\s)rep(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
                 "|#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})" +
                 "|(?<=\\s|\\.|\\\")\\\"" +
                 "|\\." +
@@ -67,7 +63,7 @@ public class Lexer {
 
         while (m.find()) {
             if (m.start() != index) {
-                throw new SyntaxException("Syntaxfel på rad " + line);
+                tokenList.add(new Token(TokenType.INVALID_CHARACTER, null, line));
             }
 
             switch (m.group().toUpperCase()) {
@@ -99,7 +95,7 @@ public class Lexer {
                     tokenList.add(new Token(TokenType.QUOTE, null, line));
                     break;
                 case ".":
-                    tokenList.add(new Token(TokenType.ENDOFEXPRESSION, null, line));
+                    tokenList.add(new Token(TokenType.END_OF_EXPRESSION, null, line));
                     break;
                 case "\n":
                     line++;
@@ -110,12 +106,18 @@ public class Lexer {
                     } else if (m.group().startsWith("%"));
                     else if (m.group().startsWith(" "));
                     else {
-                        tokenList.add(new Token(TokenType.NUM, Double.parseDouble(m.group()), line));
+                        try {
+                            tokenList.add(new Token(TokenType.NUM, Double.parseDouble(m.group()), line));
+                        } catch (NumberFormatException e) {
+                            tokenList.add(new Token(TokenType.INVALID_CHARACTER, null, line));
+                        }
                     }
             }
 
             index = m.end();
         }
+
+        if (index != input.length()) tokenList.add(new Token(TokenType.INVALID_CHARACTER, null, line));
     }
 
     public List<Token> getTokens() {
