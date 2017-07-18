@@ -62,13 +62,13 @@ poisson hamming
 
 
 -- Data type for a profile of molecules 
-data Profile = Profile [[(Char, Int)]] String Int String deriving (Show)
+data Profile = Profile [[(Char, Double)]] String Int String deriving (Show)
 
 nucleotides = "ACGT"
 aminoacids = "ACDEFGHIKLMNPQRSTVWXY"
 
 -- Creates profile from a list of molecules
-makeProfileMatrix :: [MolSeq] -> [[(Char, Int)]]
+makeProfileMatrix :: [MolSeq] -> [[(Char, Double)]]
 makeProfileMatrix [] = error "Empty sequence list"
 makeProfileMatrix sl = res
   where 
@@ -80,7 +80,7 @@ makeProfileMatrix sl = res
       else 
         zip aminoacids (replicate (length aminoacids) 0)   -- Same as above but with  PROTEIN
     strs = map seqSequence sl -- List of all the sequences 
-    tmp1 = map (map (\x -> ((head x), (length x))) . group . sort)
+    tmp1 = map (map (\x -> ((head x), ((fromIntegral (length x)) / (fromIntegral (length sl))))) . group . sort)
                (transpose strs) -- First transpose the list of sequences, 
                -- which will create a list of lists where the first list contains
                -- all first letters and so on
@@ -101,46 +101,46 @@ profileName (Profile _ _ _ s) = s
 -- Return the relativ frequency of a character
 profileFrequency :: Profile -> Int -> Char -> Double
 profileFrequency (Profile p typ numS _) i c 
-        | typ == "DNA" = getOccorencesDna (p !! i) c / fromIntegral numS
-        | otherwise = getOccorencesProtein (p !! i) c / fromIntegral numS
+        | typ == "DNA" = getOccorencesDna (p !! i) c 
+        | otherwise = getOccorencesProtein (p !! i) c 
 
 -- Helper for profileFrequency. Gets the second value from a tuple after finding the correct one
 -- Really ugly code but for performance
-getOccorencesDna :: [(Char, Int)] -> Char -> Double
+getOccorencesDna :: [(Char, Double)] -> Char -> Double
 getOccorencesDna list c
-        | c == 'A' = fromIntegral (snd (list !! 0))
-        | c == 'C' = fromIntegral (snd (list !! 1))
-        | c == 'G' = fromIntegral (snd (list !! 2))
-        | otherwise = fromIntegral (snd (list !! 3))
+        | c == 'A' = snd (list !! 0)
+        | c == 'C' = snd (list !! 1)
+        | c == 'G' = snd (list !! 2)
+        | otherwise = snd (list !! 3)
 
-getOccorencesProtein :: [(Char, Int)] -> Char -> Double
+getOccorencesProtein :: [(Char, Double)] -> Char -> Double
 getOccorencesProtein list c
-        | c == 'A' = fromIntegral (snd (list !! 0))
-        | c == 'C' = fromIntegral (snd (list !! 1))
-        | c == 'D' = fromIntegral (snd (list !! 2))
-        | c == 'E' = fromIntegral (snd (list !! 3))
-        | c == 'F' = fromIntegral (snd (list !! 4))
-        | c == 'G' = fromIntegral (snd (list !! 5))
-        | c == 'H' = fromIntegral (snd (list !! 6))
-        | c == 'I' = fromIntegral (snd (list !! 7))
-        | c == 'K' = fromIntegral (snd (list !! 8))
-        | c == 'L' = fromIntegral (snd (list !! 9))
-        | c == 'M' = fromIntegral (snd (list !! 10))
-        | c == 'N' = fromIntegral (snd (list !! 11))
-        | c == 'P' = fromIntegral (snd (list !! 12))
-        | c == 'Q' = fromIntegral (snd (list !! 13))
-        | c == 'R' = fromIntegral (snd (list !! 14))
-        | c == 'S' = fromIntegral (snd (list !! 15))
-        | c == 'T' = fromIntegral (snd (list !! 16))
-        | c == 'V' = fromIntegral (snd (list !! 17))
-        | c == 'W' = fromIntegral (snd (list !! 18))
-        | c == 'X' = fromIntegral (snd (list !! 19))
-        | otherwise = fromIntegral (snd (list !! 20))
+        | c == 'A' = snd (list !! 0)
+        | c == 'C' = snd (list !! 1)
+        | c == 'D' = snd (list !! 2)
+        | c == 'E' = snd (list !! 3)
+        | c == 'F' = snd (list !! 4)
+        | c == 'G' = snd (list !! 5)
+        | c == 'H' = snd (list !! 6)
+        | c == 'I' = snd (list !! 7)
+        | c == 'K' = snd (list !! 8)
+        | c == 'L' = snd (list !! 9)
+        | c == 'M' = snd (list !! 10)
+        | c == 'N' = snd (list !! 11)
+        | c == 'P' = snd (list !! 12)
+        | c == 'Q' = snd (list !! 13)
+        | c == 'R' = snd (list !! 14)
+        | c == 'S' = snd (list !! 15)
+        | c == 'T' = snd (list !! 16)
+        | c == 'V' = snd (list !! 17)
+        | c == 'W' = snd (list !! 18)
+        | c == 'X' = snd (list !! 19)
+        | otherwise = snd (list !! 20)
 
 profileDistance :: Profile -> Profile -> Double 
 profileDistance (Profile m1 typ1 num1 name1) (Profile m2 typ2 num2 name2)
          | typ1 /= typ2 = error "Not matching types" -- If comparing diffrent matrix
-         | otherwise = sum (zipWith (\list1 list2 -> sum (zipWith (\tup1 tup2 -> abs(((fromIntegral (snd tup1)) / (fromIntegral num1)) - ((fromIntegral (snd tup2)) / (fromIntegral num2)))) list1 list2)) m1 m2) 
+         | otherwise = sum (zipWith (\list1 list2 -> sum (zipWith (\tup1 tup2 -> abs((snd tup1) - (snd tup2))) list1 list2)) m1 m2) 
 
 class Evol object where
         name :: object -> String
