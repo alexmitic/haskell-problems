@@ -19,7 +19,8 @@ public class Token {
         return literal;
     }
 
-    public int line() {
+    public int getLine() {
         return line;
     }
+
 }

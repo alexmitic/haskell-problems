@@ -1,20 +1,45 @@
 %%%%%%% Database %%%%%%%%
-person("A").
-person("B").
-person("C").
-person("D").
-person("F").
+%% person(s).
+%% person(c1).
+%% person(c2).
+%% person(o1).
+%% person(o2).
 
-knows("A", "B").
-knows("A", "C").
-knows("B", "C").
-knows("D", "F").
+%% knows(s, o1).
+%% knows(s, c1).
+%% knows(s, c2).
+
+%% knows(c1, o1).
+%% knows(c2, o2).
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-knowEachOther(A, B) :- knows(A, B); knows(B, A).
+knowEachOther(A, B) :- knows(A, B); knows(B, A). % Friendships are symmetric
 
-possibleConsp([], _).
-possibleConsp([Head|Tail], X) :- person(X), \+ knowEachOther(Head, X), possibleConsp(Tail, X).
+spider(S) :- person(S), isSpider(S).
 
-notPartOfList([], _).
-notPartOfList([Head|Tail], X) :- person(X), \+ Head == X, notPartOfList(Tail, X). 
+isSpider(S) :- 
+        setof(Friend, knowEachOther(S, Friend), P), 
+        setof(X, person(X), Peeps),
+        subtract(Peeps, [S|P], NonF), 
+        possibleConsp(P, [], NonF, K),
+        subtract(Peeps, [S|K], Norms),
+        knowsOne(Norms, K), !. 
+
+possibleConsp([Head|Tail], K, NonF, Kprime) :- !,
+                    \+ knowsOneFromList(Head, K), % Check if head dosn't know the other consps
+                    setof(X, knowEachOther(Head, X), Friends), % Find all friends of the consps
+                    subtract(Tail, Friends, Pprime), % Remove consps friends from P as they can't be consps 
+                    append(Pprime, [Head|K], Test), % Add all potential consps and current consps together
+                    knowsOne(NonF, Test), % Check if everyone outside of potential consps and consps knows alleast one from K or P 
+                    possibleConsp(Pprime, [Head|K], NonF, Kprime).
+
+possibleConsp([_|Tail], K, NonF, Kprime) :- possibleConsp(Tail, K, NonF, Kprime).
+
+possibleConsp([], K, _, K) :- !.
+
+
+% Check if everyone from first list knows atleast one form second list 
+knowsOne([Head|Tail], List) :- knowsOneFromList(Head, List), knowsOne(Tail, List), !.
+knowsOne([], _) :- !.
+
+knowsOneFromList(X, List) :- member(Y, List), knowEachOther(X, Y), !.  

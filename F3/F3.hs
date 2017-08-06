@@ -63,6 +63,7 @@ updateStringHelper :: [String] -> [String]
 updateStringHelper [] = []
 updateStringHelper (x:xs) = "," : x : updateStringHelper xs
 
+
 -- A better and faster soulution must exist
 findLowestSist :: [[(String, String, Double)]] -> (String, String, Double)
 findLowestSist l = foldl (\a b -> if (third a) <= (third (foldl (\n x -> if (third n) <= (third x) then n else x) (head b) b)) then a else (foldl (\n x -> if (third n) <= (third x) then n else x) (head b) b)) (head (head l)) l

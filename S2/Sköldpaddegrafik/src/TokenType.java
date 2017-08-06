@@ -6,5 +6,5 @@ public enum TokenType {
     QUOTE, HEX, NUM, END_OF_EXPRESSION,
 
     // Rest
-    INVALID_CHARACTER
+    INVALID_CHARACTER, END_OF_INPUT
 }
