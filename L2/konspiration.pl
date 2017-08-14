@@ -1,29 +1,21 @@
-%%%%%%% Database %%%%%%%%
-person(s).
-person(c1).
-person(c2).
-person(o1).
-person(o2).
-
-knows(o1, s).
-knows(s, c1).
-knows(s, c2).
-
-knows(c1, o1).
-knows(c2, o2).
-%%%%%%%%%%%%%%%%%%%%%%%%%
 
 knowEachOther(A, B) :- knows(A, B); knows(B, A). % Friendships are symmetric
 
 spider(S) :- person(S), isSpider(S).
 
 isSpider(S) :- 
-        bagof(Friend, knowEachOther(S, Friend), P), 
-        bagof(X, person(X), Peeps),
-        subtract(Peeps, [S|P], NonF), 
+        bagof(Friend, knowEachOther(S, Friend), SFriends), 
+        bagof(X, person(X), AllPeople),
+        allSubsets(SFriends, P),
+        subtract(AllPeople, [S|P], NonF), 
         possibleConsp(P, [], NonF, K),
-        subtract(Peeps, [S|K], Norms),
-        knowsOne(Norms, K), !. 
+        subtract(AllPeople, [S|K], Norms),
+        knowsOne(Norms, K), !.
+
+
+possibleConsp([Head|Tail], K, NonF, Kprime) :-
+                    knowsOneFromList(Head, K), % Check if head dosn't know the other consps
+                    possibleConsp(Tail, K, NonF, Kprime). % If not consp skip it 
 
 possibleConsp([Head|Tail], K, NonF, Kprime) :- 
                     \+ knowsOneFromList(Head, K), % Check if head dosn't know the other consps
@@ -33,13 +25,18 @@ possibleConsp([Head|Tail], K, NonF, Kprime) :-
                     knowsOne(NonF, Test), % Check if everyone outside of potential consps and consps knows alleast one from K or P 
                     possibleConsp(Pprime, [Head|K], NonF, Kprime).
 
-possibleConsp([_|Tail], K, NonF, Kprime) :- possibleConsp(Tail, K, NonF, Kprime). % If not consp skip it 
-
 possibleConsp([], K, _, K) :- !.
+
+possibleConsp([], [], _, _) :- fail.
 
 
 % Check if everyone from first list knows atleast one form second list 
 knowsOne([Head|Tail], List) :- knowsOneFromList(Head, List), knowsOne(Tail, List), !.
 knowsOne([], _) :- !.
 
-knowsOneFromList(X, List) :- member(Y, List), knowEachOther(X, Y), !.  
+knowsOneFromList(X, List) :- member(Y, List), knowEachOther(X, Y).  
+
+allSubsets([], []). % Basecase. Empty list is subset of empyt list
+
+allSubsets([Head|Tail], [Head|SubTail]) :- allSubsets(Tail, SubTail). % If first element from sublist matches first from list continue with rest
+allSubsets([_|Tail], SubList) :- allSubsets(Tail, SubList). % If firsts don't match skip first from list and keep sublist

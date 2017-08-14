@@ -1,126 +1,229 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-//TODO Try to use array instead of arraylist for better performance
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.lang.Character.isLetter;
 
 /**
- * Lexer that reads input through a DataInputStream and
- * creates list of tokens from the input
+ * @author Nehliin
+ * @version 2017-04-05
+ *
+ * TO-DO:
+ * REMOVE MAX FILE SIZE IN HANDLE IMPORTS
+ * REWEITE TESTS SO THEY TEST COLUMNS
+ *
  */
 public class Lexer {
-    private List<Token> tokenList;
-    InputStream in;
 
-    public Lexer(InputStream in) throws SyntaxException, IOException {
-        tokenList = new ArrayList<>();
-        this.in = in;
-        tokenize(readIntoBuffer());
-        tokenList.add(new Token(TokenType.END_OF_INPUT, null, -1));
+
+    private static final Map<String, TokenType> keywords;
+
+
+    static {
+        keywords = new HashMap<>();
+        keywords.put("FROW",  TokenType.FORW);
+        keywords.put("BACK",  TokenType.BACK);
+        keywords.put("LEFT",   TokenType.LEFT);
+        keywords.put("RIGHT",  TokenType.RIGHT);
+        keywords.put("UP",    TokenType.UP);
+        keywords.put("DOWN",   TokenType.DOWN);
+        keywords.put("COLOR",   TokenType.COLOR);
+        keywords.put("REP",  TokenType.REP);
     }
 
-    private String readIntoBuffer() throws IOException {
-        char[] buff = new char[1048576];
-        int numRead = 0;
-        Reader reader = new InputStreamReader(in);
-        StringBuilder sb = new StringBuilder();
 
-        while (true) { // Keep read until EOF
-            numRead = reader.read(buff);
+    private final ArrayList<Token> tokens = new ArrayList();
+    private String sourceCode;
+    private int startChar = 0;
+    private int currentChar = 0;
+    private int line = 1;
 
-            if (numRead == -1) break;
-            else sb.append(buff, 0, numRead);
+    public Lexer(String sourceCode) throws Exception{
+        this.sourceCode = sourceCode;
+    }
+
+    /**
+     * Generates an ArrayList of Tokens from the given source file with an End Of File token in the end.
+     * @return ArrayList<Token>
+     * */
+    public ArrayList<Token> scanTokens() throws Exception{
+        startChar = 0; //must be reset after handling imports
+        currentChar = 0; //must be reset after handling imports
+
+        while (!isAtEnd()) {
+            startChar = currentChar;
+            scanToken();
         }
-        return sb.toString(); // Return the input in a string
+
+        tokens.add(new Token(TokenType.END_OF_INPUT,null, line));
+
+        return tokens;
     }
 
-    private void tokenize(String input) {
-        int index = 0;
-        int line = 1;
-        Pattern regex = Pattern.compile("" +
-                "%.*" +
-                "|up" +
-                "|down" +
-                "|(?<=^|\\.|\\\"|\\s)forw(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
-                "|(?<=^|\\.|\\\"|\\s)back(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
-                "|(?<=^|\\.|\\\"|\\s)left(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
-                "|(?<=^|\\.|\\\"|\\s)right(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
-                "|(?<=^|\\.|\\\"|\\s)color(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
-                "|(?<=^|\\.|\\\"|\\s)rep(?=(\\s+|(\\s*%.*\\n\\s*)+).+)" +
-                "|#([0-9a-fA-F]{3}){1,2}" +
-                "|(?<=\\s|\\.|\\\")\\\"" +
-                "|\\." +
-                "|[0-9]+" +
-                "|\\n" +
-                "|[ \\t\\r]+", Pattern.CASE_INSENSITIVE);
 
-        Matcher m = regex.matcher(input);
+    /**
+     * Scans the source code for individual tokens and adds them to the tokens ArrayList.
+     *  @return the token added
+     * */
+    private Token scanToken() throws Exception{
+        char c = advance();
+        switch (c) {
+            case '.': return addToken(TokenType.END_OF_EXPRESSION);
+            case '%':
+                // A comment goes until the end of the line.
+                while (peek() != '\n' && !isAtEnd()) advance();
+                break;
+            case ' ':
+            case '\r':
+            case '\t':
+                // Ignore whitespace.
+                break;
 
-        while (m.find()) {
-            if (m.start() != index) {
-                tokenList.add(new Token(TokenType.INVALID_CHARACTER, null, line));
-            }
+            case '\n':
+                line++;//taken care of in the addToken method
+                break;
 
-            switch (m.group().toUpperCase()) {
-                case "UP":
-                    tokenList.add(new Token(TokenType.UP, null, line));
-                    break;
-                case "DOWN":
-                    tokenList.add(new Token(TokenType.DOWN, null, line));
-                    break;
-                case "FORW":
-                    tokenList.add(new Token(TokenType.FORW, null, line));
-                    break;
-                case "BACK":
-                    tokenList.add(new Token(TokenType.BACK, null, line));
-                    break;
-                case "LEFT":
-                    tokenList.add(new Token(TokenType.LEFT, null, line));
-                    break;
-                case "RIGHT":
-                    tokenList.add(new Token(TokenType.RIGHT, null, line));
-                    break;
-                case "COLOR":
-                    tokenList.add(new Token(TokenType.COLOR, null, line));
-                    break;
-                case "REP":
-                    tokenList.add(new Token(TokenType.REP, null, line));
-                    break;
-                case "\"":
-                    tokenList.add(new Token(TokenType.QUOTE, null, line));
-                    break;
-                case ".":
-                    tokenList.add(new Token(TokenType.END_OF_EXPRESSION, null, line));
-                    break;
-                case "\n":
-                    line++;
-                    break;
-                default:
-                    if (m.group().startsWith("#")) {
-                        tokenList.add(new Token(TokenType.HEX, m.group(), line));
-                    } else if (m.group().startsWith("%"));
-                    else if (m.group().startsWith(" "));
-                    else {
-                        try {
-                            tokenList.add(new Token(TokenType.NUM, Double.parseDouble(m.group()), line));
-                        } catch (NumberFormatException e) {
-                            tokenList.add(new Token(TokenType.INVALID_CHARACTER, null, line));
-                        }
+            case '"': return addToken(TokenType.QUOTE);
+
+            case 'FORW' =
+
+            default:
+                if (isDigit(c)) {
+                    return number();
+                } else if (isWord(c)) {
+                    return identifier();
+                } else {
+                    if(c != '\u0000'){
+                        throw new SyntaxException("Syntaxfel på rad" + line);
                     }
-            }
+                }
+                return null;
+        }
+        return null;
+    }
 
-            index = m.end();
+    /**
+     *  This method searches for keywords and identifiers and add them to the "tokens" ArrayList.
+     *  Identifiers are things like variable names for example and is not to be confused with other literals i.e the number 12 or the string "hello".
+     *  This method ignores IMPORT statements that isn't in the beginning of the file.
+     *  @return the token added
+     * */
+    private Token identifier() {
+        while (isWordNumeric(peek())) advance();
+        String text = sourceCode.substring(startChar, currentChar);
+        TokenType type = keywords.get(text);
+        return addToken(type);
+
+    }
+
+    /**
+     * This method searches for number literals and add them to the "tokens" ArrayList as doubles
+     * @return the token added
+     * */
+    private Token number() {
+        while (isDigit(peek())) advance();
+        return addToken(TokenType.NUM, Double.parseDouble(sourceCode.substring(startChar, currentChar)));
+    }
+
+    private Token string() throws Exception {
+        while (peek() != '"' && !isAtEnd()) {
+            if (peek() == '\n') line++;
+            advance();
         }
 
-        if (index != input.length()) tokenList.add(new Token(TokenType.INVALID_CHARACTER, null, line));
+        // Unterminated string.
+        if (isAtEnd()) {
+            //SyntaxError.sendError(line,column,ErrorType.MISSING_CLOSING_QUOTATION_MARK);
+            return null;
+        }
+
+        // The closing ".
+        advance();
+
+        // Trim the surrounding quotes.
+        String value = sourceCode.substring(startChar + 1, currentChar - 1);
+        return addToken(TokenType.HEX, value);
     }
 
-    public List<Token> getTokens() {
-        return tokenList;
+    /**
+     * This peeks the char without advancing.
+     * @return the char if there exists one else '\0'
+     * */
+    private char peek() {
+        if (currentChar >= sourceCode.length()) return '\0';
+        return sourceCode.charAt(currentChar);
     }
+
+
+    /**
+     * controls if the char is part of the alphabet or '_'
+     * @return if it is or not
+     * */
+    private boolean isWord(char c) {
+        return isLetter(c) || c == '_';
+    }
+
+    /**
+     * controls if the char is part of the alphabet or '_' OR a number
+     * @return if it is or not
+     * */
+    private boolean isWordNumeric(char c) {
+        return isWord(c) || isDigit(c);
+    }
+
+    /**
+     * controls if the char is a number
+     * @return if it is or not
+     * */
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+
+
+    /**
+     * controls if the currentChar is at the end of the file or past the end
+     * @return if it is or not
+     * */
+    private boolean isAtEnd() {
+        return currentChar >= sourceCode.length();
+    }
+
+
+    /**
+     * increments the currentChar and returns the next char in the source code
+     * @return the next char in the source code
+     * */
+    private char advance() {
+        currentChar++;
+        column++;
+        return sourceCode.charAt(currentChar - 1);
+    }
+
+    /**
+     * Adds a token to the "tokens" ArrayList with null as literal (meaning the token isn't a literal)
+     * @param type The token type to be added
+     * @return the token added
+     * */
+    private Token addToken(TokenType type) {
+        return addToken(type, null);
+    }
+
+    /**
+     * Adds a token to the "tokens" ArrayList with null as literal
+     * @param type The token type to be added
+     * @param literal the literal of the token (NUMBER, STRING or IDENTIFIER)
+     * @return the token added
+     * */
+    private Token addToken(TokenType type, Object literal) {
+
+        String text = sourceCode.substring(startChar, currentChar);
+        Token token;
+
+            token = new Token(type, literal, line);
+
+        tokens.add(token);
+        return token;
+    }
+
 }
