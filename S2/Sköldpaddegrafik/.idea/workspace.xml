@@ -26,13 +26,12 @@
       <file leaf-file-name="Parser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="18" lean-forward="true" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="18" />
+            <state relative-caret-position="371">
+              <caret line="44" column="20" lean-forward="false" selection-start-line="44" selection-start-column="20" selection-end-line="44" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#findLastValidToken#0;class#Parser#0" expanded="false" />
                 <element signature="method#findPreviousValidToken#0;class#Parser#0" expanded="false" />
-                <element signature="method#upOrDownNode#0;class#Parser#0" expanded="false" />
                 <element signature="method#forwOrBackNode#0;class#Parser#0" expanded="false" />
                 <element signature="method#leftOrRightNode#0;class#Parser#0" expanded="false" />
                 <element signature="method#colorNode#0;class#Parser#0" expanded="false" />
@@ -44,7 +43,7 @@
       <file leaf-file-name="Execute.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Execute.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="574">
+            <state relative-caret-position="867">
               <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
               <folding />
             </state>
@@ -105,21 +104,21 @@
       <file leaf-file-name="Lexer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Lexer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1496">
-              <caret line="88" column="25" lean-forward="false" selection-start-line="88" selection-start-column="25" selection-end-line="88" selection-end-column="25" />
+            <state relative-caret-position="272">
+              <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4752#4753#0" expanded="true" />
-                <element signature="e#4798#4799#0" expanded="true" />
-                <element signature="e#4963#4964#0" expanded="true" />
-                <element signature="e#5009#5010#0" expanded="true" />
-                <element signature="e#5137#5138#0" expanded="true" />
-                <element signature="e#5180#5181#0" expanded="true" />
-                <element signature="e#5340#5341#0" expanded="true" />
-                <element signature="e#5397#5398#0" expanded="true" />
-                <element signature="e#5915#5916#0" expanded="true" />
-                <element signature="e#5958#5959#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Sköldpaddegrafik.iml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Sköldpaddegrafik.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -187,9 +186,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -676,11 +675,13 @@
       <workItem from="1501153859596" duration="46000" />
       <workItem from="1501162312230" duration="685000" />
       <workItem from="1502280986470" duration="2256000" />
+      <workItem from="1502884090965" duration="193000" />
+      <workItem from="1503655490271" duration="629000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61456000" />
+    <option name="totallyTimeSpent" value="62278000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="707" extended-state="6" />
@@ -698,7 +699,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19709209" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20355412" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -914,7 +915,6 @@
             <element signature="imports" expanded="true" />
             <element signature="method#findLastValidToken#0;class#Parser#0" expanded="false" />
             <element signature="method#findPreviousValidToken#0;class#Parser#0" expanded="false" />
-            <element signature="method#upOrDownNode#0;class#Parser#0" expanded="false" />
             <element signature="method#forwOrBackNode#0;class#Parser#0" expanded="false" />
             <element signature="method#leftOrRightNode#0;class#Parser#0" expanded="false" />
             <element signature="method#colorNode#0;class#Parser#0" expanded="false" />
@@ -936,16 +936,6 @@
           <caret line="41" column="63" lean-forward="true" selection-start-line="41" selection-start-column="63" selection-end-line="41" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4798#4799#0" expanded="true" />
-            <element signature="e#4963#4964#0" expanded="true" />
-            <element signature="e#5009#5010#0" expanded="true" />
-            <element signature="e#5137#5138#0" expanded="true" />
-            <element signature="e#5180#5181#0" expanded="true" />
-            <element signature="e#5340#5341#0" expanded="true" />
-            <element signature="e#5397#5398#0" expanded="true" />
-            <element signature="e#5915#5916#0" expanded="true" />
-            <element signature="e#5958#5959#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -985,7 +975,6 @@
             <element signature="imports" expanded="true" />
             <element signature="method#findLastValidToken#0;class#Parser#0" expanded="false" />
             <element signature="method#findPreviousValidToken#0;class#Parser#0" expanded="false" />
-            <element signature="method#upOrDownNode#0;class#Parser#0" expanded="false" />
             <element signature="method#forwOrBackNode#0;class#Parser#0" expanded="false" />
             <element signature="method#leftOrRightNode#0;class#Parser#0" expanded="false" />
             <element signature="method#colorNode#0;class#Parser#0" expanded="false" />
@@ -1030,16 +1019,6 @@
           <caret line="26" column="29" lean-forward="false" selection-start-line="26" selection-start-column="29" selection-end-line="26" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4798#4799#0" expanded="true" />
-            <element signature="e#4963#4964#0" expanded="true" />
-            <element signature="e#5009#5010#0" expanded="true" />
-            <element signature="e#5137#5138#0" expanded="true" />
-            <element signature="e#5180#5181#0" expanded="true" />
-            <element signature="e#5340#5341#0" expanded="true" />
-            <element signature="e#5397#5398#0" expanded="true" />
-            <element signature="e#5915#5916#0" expanded="true" />
-            <element signature="e#5958#5959#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1079,7 +1058,6 @@
             <element signature="imports" expanded="true" />
             <element signature="method#findLastValidToken#0;class#Parser#0" expanded="false" />
             <element signature="method#findPreviousValidToken#0;class#Parser#0" expanded="false" />
-            <element signature="method#upOrDownNode#0;class#Parser#0" expanded="false" />
             <element signature="method#forwOrBackNode#0;class#Parser#0" expanded="false" />
             <element signature="method#leftOrRightNode#0;class#Parser#0" expanded="false" />
             <element signature="method#colorNode#0;class#Parser#0" expanded="false" />
@@ -1137,7 +1115,6 @@
             <element signature="imports" expanded="true" />
             <element signature="method#findLastValidToken#0;class#Parser#0" expanded="false" />
             <element signature="method#findPreviousValidToken#0;class#Parser#0" expanded="false" />
-            <element signature="method#upOrDownNode#0;class#Parser#0" expanded="false" />
             <element signature="method#forwOrBackNode#0;class#Parser#0" expanded="false" />
             <element signature="method#leftOrRightNode#0;class#Parser#0" expanded="false" />
             <element signature="method#colorNode#0;class#Parser#0" expanded="false" />
@@ -1158,16 +1135,6 @@
           <caret line="126" column="0" lean-forward="true" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4798#4799#0" expanded="true" />
-            <element signature="e#4963#4964#0" expanded="true" />
-            <element signature="e#5009#5010#0" expanded="true" />
-            <element signature="e#5137#5138#0" expanded="true" />
-            <element signature="e#5180#5181#0" expanded="true" />
-            <element signature="e#5340#5341#0" expanded="true" />
-            <element signature="e#5397#5398#0" expanded="true" />
-            <element signature="e#5915#5916#0" expanded="true" />
-            <element signature="e#5958#5959#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1186,16 +1153,6 @@
           <caret line="8" column="42" lean-forward="false" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4798#4799#0" expanded="true" />
-            <element signature="e#4963#4964#0" expanded="true" />
-            <element signature="e#5009#5010#0" expanded="true" />
-            <element signature="e#5137#5138#0" expanded="true" />
-            <element signature="e#5180#5181#0" expanded="true" />
-            <element signature="e#5340#5341#0" expanded="true" />
-            <element signature="e#5397#5398#0" expanded="true" />
-            <element signature="e#5915#5916#0" expanded="true" />
-            <element signature="e#5958#5959#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1235,7 +1192,6 @@
             <element signature="imports" expanded="true" />
             <element signature="method#findLastValidToken#0;class#Parser#0" expanded="false" />
             <element signature="method#findPreviousValidToken#0;class#Parser#0" expanded="false" />
-            <element signature="method#upOrDownNode#0;class#Parser#0" expanded="false" />
             <element signature="method#forwOrBackNode#0;class#Parser#0" expanded="false" />
             <element signature="method#leftOrRightNode#0;class#Parser#0" expanded="false" />
             <element signature="method#colorNode#0;class#Parser#0" expanded="false" />
@@ -1283,16 +1239,6 @@
           <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4798#4799#0" expanded="true" />
-            <element signature="e#4963#4964#0" expanded="true" />
-            <element signature="e#5009#5010#0" expanded="true" />
-            <element signature="e#5137#5138#0" expanded="true" />
-            <element signature="e#5180#5181#0" expanded="true" />
-            <element signature="e#5340#5341#0" expanded="true" />
-            <element signature="e#5397#5398#0" expanded="true" />
-            <element signature="e#5915#5916#0" expanded="true" />
-            <element signature="e#5958#5959#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1302,13 +1248,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-580">
           <caret line="234" column="18" lean-forward="false" selection-start-line="234" selection-start-column="18" selection-end-line="234" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Sköldpaddegrafik.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1348,25 +1287,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Execute.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="574">
+        <state relative-caret-position="867">
           <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Parser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="18" lean-forward="true" selection-start-line="29" selection-start-column="18" selection-end-line="29" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#findLastValidToken#0;class#Parser#0" expanded="false" />
-            <element signature="method#findPreviousValidToken#0;class#Parser#0" expanded="false" />
-            <element signature="method#upOrDownNode#0;class#Parser#0" expanded="false" />
-            <element signature="method#forwOrBackNode#0;class#Parser#0" expanded="false" />
-            <element signature="method#leftOrRightNode#0;class#Parser#0" expanded="false" />
-            <element signature="method#colorNode#0;class#Parser#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1389,22 +1312,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Lexer.java">
+    <entry file="file://$PROJECT_DIR$/Sköldpaddegrafik.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1496">
-          <caret line="88" column="25" lean-forward="false" selection-start-line="88" selection-start-column="25" selection-end-line="88" selection-end-column="25" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Parser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="44" column="20" lean-forward="false" selection-start-line="44" selection-start-column="20" selection-end-line="44" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4752#4753#0" expanded="true" />
-            <element signature="e#4798#4799#0" expanded="true" />
-            <element signature="e#4963#4964#0" expanded="true" />
-            <element signature="e#5009#5010#0" expanded="true" />
-            <element signature="e#5137#5138#0" expanded="true" />
-            <element signature="e#5180#5181#0" expanded="true" />
-            <element signature="e#5340#5341#0" expanded="true" />
-            <element signature="e#5397#5398#0" expanded="true" />
-            <element signature="e#5915#5916#0" expanded="true" />
-            <element signature="e#5958#5959#0" expanded="true" />
+            <element signature="method#findLastValidToken#0;class#Parser#0" expanded="false" />
+            <element signature="method#findPreviousValidToken#0;class#Parser#0" expanded="false" />
+            <element signature="method#forwOrBackNode#0;class#Parser#0" expanded="false" />
+            <element signature="method#leftOrRightNode#0;class#Parser#0" expanded="false" />
+            <element signature="method#colorNode#0;class#Parser#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Lexer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
