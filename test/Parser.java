@@ -244,6 +244,10 @@ public class Parser {
                 }
             }
 
+            if (token.getType() == TokenType.QUOTE && numNodes == 0) {
+                throw new SyntaxException("Syntaxfel på rad " + token.getLine());
+            }
+
             for (int i = 0; i < numTimes - 1; i++) {
                 for (int j = 0; j < numNodes; j++) {
                     nodes.add(nodes.get(nodes.size() - numNodes));
@@ -306,6 +310,10 @@ public class Parser {
                     parseStatement(token);
                     numNodes++;
                 }
+            }
+
+            if (token.getType() == TokenType.QUOTE && numNodes == 0) {
+                throw new SyntaxException("Syntaxfel på rad " + token.getLine());
             }
 
             for (int i = 0; i < numTimes - 1; i++) {
